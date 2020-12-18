@@ -1,11 +1,12 @@
 'use strict';
 const { Model, DataTypes } = require('sequelize');
 
+// A model for the Courses table in our database.
 module.exports = (sequelize) => {
     class Course extends Model {}
     Course.init({
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
@@ -59,9 +60,10 @@ module.exports = (sequelize) => {
         }
     }, { sequelize });
 
+    // Creates a relationship with the Users table in our database, and adds the foreign key as the value 'userId'.
     Course.associate = (models) => {
         Course.belongsTo(models.User, { foreignKey: 'userId' });
       };
 
-return User;
+return Course;
 };

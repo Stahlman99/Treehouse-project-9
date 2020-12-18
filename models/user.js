@@ -1,11 +1,13 @@
 'use strict';
 const { Model, DataTypes } = require('sequelize');
+const bcrypt = require('bcrypt');
 
+// A model for the Users table in our database.
 module.exports = (sequelize) => {
     class User extends Model {}
     User.init({
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
@@ -55,10 +57,15 @@ module.exports = (sequelize) => {
                 notEmpty: {
                     msg: 'Please provide a password.'
                 }
+            },
+            set(val) {
+                const hashedPassword = bcrypt.hashSync(val, 10);
+                this.setDataValue('password', hashedPassword);
             }
         }
     }, { sequelize });
 
+    // Creates a relationship with the Courses table in our database, and uses the id as the foreign key for that relationship.
     User.associate = (models) => {
         User.hasMany(models.Course, { foreignKey: 'userId' });
       };
