@@ -17,8 +17,8 @@ const User = require('./models').User;
 router.post('/users', asyncHandler(async (req, res) => {
     try {
         await User.create(req.body);
-        res.status(201).json({ "message": "Account successfully created!" });
         res.location('/');
+        res.status(201).json({ "message": "Account successfully created!" });
       } catch (error) {
         console.log('ERROR: ', error.name);
     

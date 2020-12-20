@@ -4,6 +4,16 @@
 const express = require('express');
 const morgan = require('morgan');
 const routes = require('./routes');
+const sequelize = require('./models').sequelize;
+
+(async () => {
+  try {
+    await sequelize.sync();
+    console.log('Database synced successfully.');
+  } catch (error) {
+    console.error('Unable to synced successfully:', error);
+  }
+})();
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
