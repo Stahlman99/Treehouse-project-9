@@ -72,3 +72,12 @@ module.exports = (sequelize) => {
 
 return User;
 };
+
+(async () => {
+    try {
+      await User.sync();
+      console.log('Users table synced successfully.');
+    } catch (error) {
+      console.error('Unable to sync Users table successfully:', error);
+    }
+  });

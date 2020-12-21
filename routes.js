@@ -14,9 +14,11 @@ const User = require('./models').User;
 //     });
 // }));
 
+// Create (POST) user to the database.
 router.post('/users', asyncHandler(async (req, res) => {
     try {
-        await User.create(req.body);
+        const user = await User.create(req.body);
+        console.log(user);
         res.location('/');
         res.status(201).json({ "message": "Account successfully created!" });
       } catch (error) {

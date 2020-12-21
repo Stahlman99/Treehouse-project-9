@@ -67,3 +67,12 @@ module.exports = (sequelize) => {
 
 return Course;
 };
+
+(async () => {
+    try {
+      await Course.sync();
+      console.log('Course table synced successfully.');
+    } catch (error) {
+      console.error('Unable to sync course table successfully:', error);
+    }
+  });
