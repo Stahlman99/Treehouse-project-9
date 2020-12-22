@@ -26,7 +26,7 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
 // A POST route that creates (POSTs) a user to the database.
 router.post('/users', asyncHandler(async (req, res) => {
     try {
-        const user = await User.create(req.body);
+        await User.create(req.body);
         res.location('/');
         res.status(201).json({ "message": "Account successfully created!" });
       } catch (error) {
@@ -83,12 +83,17 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
 
 // A PUT route that allows the users to update a specific course.
 router.put('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
+
   let course;
   try {
     course = await Course.findByPk(req.params.id);
     if(course) {
-      await course.update(req.body);
-      res.sendStatus(204);
+      if (req.currentUser.id == course.userId) {
+        await course.update(req.body);
+        res.sendStatus(204);
+      } else {
+        res.status(403).json({ Forbidden: "Unauthorized User" });
+      }
     } else {
       res.sendStatus(404);
     }
@@ -106,8 +111,12 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
 router.delete('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
   const course = await Course.findByPk(req.params.id);
   if(course) {
-    await course.destroy();
-    res.sendStatus(204);
+    if (req.currentUser.id == course.userId) {
+      await course.destroy();
+      res.sendStatus(204);
+    } else {
+      res.status(403).json({ Forbidden: "Unauthorized User" });
+    }
   } else {
     res.sendStatus(404);
   }
