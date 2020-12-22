@@ -1,9 +1,13 @@
+'use strict';
+
+// Import modules.
 const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('./middleware/async-handler');
 const { authenticateUser } = require('./middleware/auth-user');
 const User = require('./models').User;
 
+// A GET route that retrieves the current user.
 router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
     const user = req.currentUser;
 
@@ -14,7 +18,7 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
     });
 }));
 
-// Create (POST) user to the database.
+// A POST route that creates (POSTs) a user to the database.
 router.post('/users', asyncHandler(async (req, res) => {
     try {
         const user = await User.create(req.body);
