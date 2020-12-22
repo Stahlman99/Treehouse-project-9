@@ -4,15 +4,15 @@ const { asyncHandler } = require('./middleware/async-handler');
 const { authenticateUser } = require('./middleware/auth-user');
 const User = require('./models').User;
 
-// router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
-//     const user = req.currentUser;
+router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
+    const user = req.currentUser;
 
-//     res.json({
-//         firstName: user.firstName,
-//         lastName: user.lastName,
-//         emailAddress: user.emailAddress
-//     });
-// }));
+    res.json({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emailAddress: user.emailAddress
+    });
+}));
 
 // Create (POST) user to the database.
 router.post('/users', asyncHandler(async (req, res) => {
