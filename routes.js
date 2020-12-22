@@ -46,7 +46,7 @@ router.post('/users', asyncHandler(async (req, res) => {
 */
 
 // A GET route that retrieves the list of courses.
-router.get('/courses', authenticateUser, asyncHandler(async (req, res) => {
+router.get('/courses', asyncHandler(async (req, res) => {
   const courses = await Course.findAll({attributes: ['title', 'userId']});
 
   res.json({
@@ -55,7 +55,7 @@ router.get('/courses', authenticateUser, asyncHandler(async (req, res) => {
 }));
 
 // A GET route that retrieves a specific course.
-router.get('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
+router.get('/courses/:id', asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id, {attributes: ['title', 'userId']});
 
   res.json({
@@ -64,7 +64,7 @@ router.get('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
 }));
 
 // A POST route that creates (POSTs) a course to the database.
-router.post('/courses', asyncHandler(async (req, res) => {
+router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
   try {
       const course = await Course.create(req.body);
       res.location(`/courses/${course.id}`);
@@ -81,8 +81,8 @@ router.post('/courses', asyncHandler(async (req, res) => {
     }
 }));
 
-// A POST route that allows the users to update a specific course (PUT route).
-router.post('/courses/:id', asyncHandler(async(req, res) => {
+// A PUT route that allows the users to update a specific course.
+router.put('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
   let course;
   try {
     course = await Course.findByPk(req.params.id);
@@ -102,8 +102,8 @@ router.post('/courses/:id', asyncHandler(async(req, res) => {
   }
 }));
 
-// A POST route that deletes a specific course (DELETE route).
-router.post('/courses/:id/delete', asyncHandler(async(req, res) => {
+// A DELETE route that deletes a specific course.
+router.delete('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
   const course = await Course.findByPk(req.params.id);
   if(course) {
     await course.destroy();
