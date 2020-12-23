@@ -28,7 +28,7 @@ router.post('/users', asyncHandler(async (req, res) => {
     try {
         await User.create(req.body);
         res.location('/');
-        res.status(201).json({ "message": "Account successfully created!" });
+        res.sendStatus(201);
       } catch (error) {
         console.log('ERROR: ', error.name);
     
@@ -47,7 +47,13 @@ router.post('/users', asyncHandler(async (req, res) => {
 
 // A GET route that retrieves the list of courses.
 router.get('/courses', asyncHandler(async (req, res) => {
-  const courses = await Course.findAll({attributes: ['title', 'userId']});
+  const courses = await Course.findAll({
+    attributes: {exclude: ['createdAt', 'updatedAt', 'userId']},
+    include: [{
+      model: User,
+      attributes: {exclude: ['createdAt', 'updatedAt', 'password']}
+    }]
+  });
 
   res.json({
       courses
@@ -56,7 +62,13 @@ router.get('/courses', asyncHandler(async (req, res) => {
 
 // A GET route that retrieves a specific course.
 router.get('/courses/:id', asyncHandler(async (req, res) => {
-  const course = await Course.findByPk(req.params.id, {attributes: ['title', 'userId']});
+  const course = await Course.findByPk(req.params.id, {
+    attributes: {exclude: ['createdAt', 'updatedAt', 'userId']},
+    include: [{
+      model: User,
+      attributes: {exclude: ['createdAt', 'updatedAt', 'password']}
+    }]
+  });
 
   res.json({
       course
@@ -68,7 +80,7 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
   try {
       const course = await Course.create(req.body);
       res.location(`/courses/${course.id}`);
-      res.status(201).json({ "message": "Course successfully created!" });
+      res.sendStatus(201);
     } catch (error) {
       console.log('ERROR: ', error.name);
   
