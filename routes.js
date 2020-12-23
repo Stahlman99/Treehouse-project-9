@@ -28,7 +28,7 @@ router.post('/users', asyncHandler(async (req, res) => {
     try {
         await User.create(req.body);
         res.location('/');
-        res.sendStatus(201);
+        res.status(201).send();
       } catch (error) {
         console.log('ERROR: ', error.name);
     
@@ -80,7 +80,7 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
   try {
       const course = await Course.create(req.body);
       res.location(`/courses/${course.id}`);
-      res.sendStatus(201);
+      res.status(201).send();
     } catch (error) {
       console.log('ERROR: ', error.name);
   
@@ -102,12 +102,12 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
     if(course) {
       if (req.currentUser.id == course.userId) {
         await course.update(req.body);
-        res.sendStatus(204);
+        res.status(204).send();
       } else {
         res.status(403).json({ Forbidden: "Unauthorized User" });
       }
     } else {
-      res.sendStatus(404);
+      res.status(404).send();
     }
   } catch (error) {
     if(error.name === "SequelizeValidationError") {
@@ -125,12 +125,12 @@ router.delete('/courses/:id', authenticateUser, asyncHandler(async(req, res) => 
   if(course) {
     if (req.currentUser.id == course.userId) {
       await course.destroy();
-      res.sendStatus(204);
+      res.status(204).send();
     } else {
       res.status(403).json({ Forbidden: "Unauthorized User" });
     }
   } else {
-    res.sendStatus(404);
+    res.status(404).send();
   }
 }));
 
