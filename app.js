@@ -10,11 +10,11 @@ const cors = require('cors');
 // Variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
-// Enable CORS
-app.use(cors());
-
 // Create the Express app
 const app = express();
+
+// Enable CORS
+app.use(cors());
 
 // Set Express to express.json
 app.use(express.json());
